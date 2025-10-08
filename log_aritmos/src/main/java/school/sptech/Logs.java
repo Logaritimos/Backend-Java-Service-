@@ -1,5 +1,7 @@
 package school.sptech;
 
+import org.apache.commons.dbcp2.BasicDataSource;
+
 import java.util.Scanner;
 
 public class Logs {
@@ -7,6 +9,13 @@ public class Logs {
         Scanner leitor = new Scanner(System.in);
         LogUtils logUtils = new LogUtils();
         boolean repetir = true;
+
+        // Conexão com o BD//
+            BasicDataSource basicDataSource = new BasicDataSource();
+            basicDataSource.setUrl("jdbc:mysql:mem:logaritmos");
+            basicDataSource.setUsername("");
+            basicDataSource.setPassword("");
+        //Conexão com o BD//
 
         logUtils.exibirCabecalho();
 
