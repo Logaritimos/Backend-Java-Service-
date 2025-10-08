@@ -6,9 +6,11 @@ public class Logs {
     public static void main(String[] args) {
         Scanner leitor = new Scanner(System.in);
         LogUtils logUtils = new LogUtils();
+        RegistroLogs registroLogs = new RegistroLogs();
         boolean repetir = true;
 
         logUtils.exibirCabecalho();
+        registroLogs.exibirCabecalhos();
 
         while (repetir) {
             System.out.print("\nDigite o CNPJ (apenas números): ");

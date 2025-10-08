@@ -8,12 +8,18 @@ public class RegistroLogs {
     private String descricao;
     private LocalDateTime dtHora;
 
-    public Integer getIdLogs() {
-        return idLogs;
+    public RegistroLogs(Integer idLogs, String categoria, String descricao, LocalDateTime dtHora) {
+        this.idLogs = idLogs;
+        this.categoria = categoria;
+        this.descricao = descricao;
+        this.dtHora = dtHora;
+    }
+    public RegistroLogs(){
+
     }
 
-    public void setIdLogs(Integer idLogs) {
-        this.idLogs = idLogs;
+    public Integer getIdLogs() {
+        return idLogs;
     }
 
     public String getCategoria() {
@@ -38,5 +44,14 @@ public class RegistroLogs {
 
     public void setDtHora(LocalDateTime dtHora) {
         this.dtHora = dtHora;
+    }
+
+    public void exibirCabecalhos() {
+        System.out.println("██╗      ██████╗  ██████╗  █████╗ ██████╗ ██╗████████╗███╗   ███╗ ██████╗ ███████╗");
+        System.out.println("██║     ██╔═══██╗██╔════╝ ██╔══██╗██╔══██╗██║╚══██╔══╝████╗ ████║██╔═══██╗██╔════╝");
+        System.out.println("██║     ██║   ██║██║  ███╗███████║██████╔╝██║   ██║   ██╔████╔██║██║   ██║███████╗");
+        System.out.println("██║     ██║   ██║██║   ██║██╔══██║██╔██╔╝ ██║   ██║   ██║╚██╔╝██║██║   ██║╚════██║");
+        System.out.println("███████╗╚██████╔╝╚██████╔╝██║  ██║██║╚██╗ ██║   ██║   ██║ ╚═╝ ██║╚██████╔╝███████║");
+        System.out.println("╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝ ╚═╝ ╚═╝   ╚═╝   ╚═╝     ╚═╝ ╚═════╝ ╚══════╝");
     }
 }

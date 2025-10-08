@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class LogUtils {
+
     void simularLogs(String mensagem, String tipo) {
         try {
             String cor;
