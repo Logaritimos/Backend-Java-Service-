@@ -8,18 +8,19 @@ public class RegistroLogs {
     private String descricao;
     private LocalDateTime dtHora;
 
-    public RegistroLogs(Integer idLogs, String categoria, String descricao, LocalDateTime dtHora) {
-        this.idLogs = idLogs;
+    public RegistroLogs(String categoria, String descricao){
         this.categoria = categoria;
         this.descricao = descricao;
-        this.dtHora = dtHora;
+        this.dtHora = LocalDateTime.now();
     }
-    public RegistroLogs(){
-
-    }
+    public RegistroLogs(){}
 
     public Integer getIdLogs() {
         return idLogs;
+    }
+
+    public void setIdLogs(Integer idLogs){
+        this.idLogs = idLogs;
     }
 
     public String getCategoria() {

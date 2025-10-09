@@ -8,7 +8,24 @@ import java.util.List;
 public class Conexao {
 
     BasicDataSource basicDataSource = new BasicDataSource();
-    JdbcTemplate jdbcTemplate = new JdbcTemplate(basicDataSource);
+    JdbcTemplate jdbcTemplate;
+
+    public Conexao(){
+        String dbUrl = System.getenv("jdbc:mysql:mem:logaritmos"); // Ex: jdbc:mysql://seu-host-publico.amazonaws.com:3306/logaritmos
+        String dbUser = System.getenv("DB_USER"); // Ex: root
+        String dbPassword = System.getenv("DB_PASSWORD"); // Ex: urubu100
+
+        if (dbUrl == null || dbUser == null || dbPassword == null) {
+            System.err.println("ERRO: Variáveis de ambiente do banco de dados (DB_URL, DB_USER, DB_PASSWORD) não foram configuradas.");
+            throw new IllegalStateException("Configuração de banco de dados ausente.");
+        }
+
+        basicDataSource.setUrl(dbUrl);
+        basicDataSource.setUsername(dbUser);
+        basicDataSource.setPassword(dbPassword);
+
+        this.jdbcTemplate = new JdbcTemplate(basicDataSource);
+    }
 
     public void inserirDadosVoo(List<Voo> voos){
         for (Voo vooDaVez : voos) {
