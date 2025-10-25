@@ -61,12 +61,6 @@ public class VooService {
             if (neg(v.getNumEmbarques())) erros.add(chave(v) + "Embarques negativos");
             if (neg(v.getNumDesembarques())) erros.add(chave(v) + "Desembarques negativos");
             if (neg(v.getNumVoosTotais())) erros.add(chave(v) + "Total de voos negativo");
-            if (v.getNumVoosTotais() != null
-                    && v.getNumVoosRegulares() != null
-                    && v.getNumVoosIrregulares() != null
-                    && v.getNumVoosTotais() != (v.getNumVoosRegulares() + v.getNumVoosIrregulares())) {
-                erros.add(chave(v) + "Total != regulares + irregulares");
-            }
         }
         return erros;
     }
