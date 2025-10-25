@@ -90,7 +90,7 @@ public class LeitorExcell {
                     String.format("Usando aba '%s', header na linha %d. Mapeamento: %s",
                             sheet.getSheetName(), headerRowNum, mapeamentoCurto(colIndex)));
 
-            // 👉 Auto‑correção da coluna "Total"
+            // 👉 Auto‑correção da coluna "Total" (mantido como estava)
             corrigirColunaTotalSeNecessario(sheet, headerRowNum, fmt, colIndex, logService);
 
             // Leitura em lotes
@@ -103,23 +103,34 @@ public class LeitorExcell {
                 if (linhaSemDados(row, fmt, 3)) continue;
 
                 Voo v = new Voo();
+
+                // Strings e inteiros básicos
                 v.setEstado(getString(row, colIndex.get("estado"), fmt));
                 v.setMes(getString(row, colIndex.get("mes"), fmt));
                 v.setAno(getInt(row, colIndex.get("ano"), fmt));
-
                 v.setQtdAeroportos(getInt(row, colIndex.get("qtdaeroportos"), fmt));
-                v.setNumVoosRegulares(getInt(row, colIndex.get("numvoosregulares"), fmt));
-                v.setNumVoosIrregulares(getInt(row, colIndex.get("numvoosirregulares"), fmt));
                 v.setNumEmbarques(getInt(row, colIndex.get("numembarques"), fmt));
                 v.setNumDesembarques(getInt(row, colIndex.get("numdesembarques"), fmt));
-                v.setNumVoosTotais(getInt(row, colIndex.get("numvoostotais"), fmt));
 
-                // Fallback suave: se total vier nulo, preenche com reg+irr
-                if (v.getNumVoosTotais() == null &&
-                        v.getNumVoosRegulares() != null &&
-                        v.getNumVoosIrregulares() != null) {
-                    v.setNumVoosTotais(v.getNumVoosRegulares() + v.getNumVoosIrregulares());
+                // Campos de voo (reg, irr, tot) em variáveis para aplicar a regra
+                Integer reg = getInt(row, colIndex.get("numvoosregulares"), fmt);
+                Integer irr = getInt(row, colIndex.get("numvoosirregulares"), fmt);
+                Integer tot = getInt(row, colIndex.get("numvoostotais"), fmt);
+
+                // ✅ Regra solicitada:
+                // Se "total" vier como 1 e existirem reg/irr, substitui por reg + irr
+                if (tot != null && tot == 1 && reg != null && irr != null) {
+                    tot = reg + irr;
                 }
+
+                // Fallback suave já existente: se total vier nulo, usa reg+irr (quando possível)
+                if (tot == null && reg != null && irr != null) {
+                    tot = reg + irr;
+                }
+
+                v.setNumVoosRegulares(reg);
+                v.setNumVoosIrregulares(irr);
+                v.setNumVoosTotais(tot);
 
                 buffer.add(v);
                 if (buffer.size() == batchSize) {
