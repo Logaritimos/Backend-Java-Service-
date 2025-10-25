@@ -1,37 +1,39 @@
 package school.sptech;
 
+import java.nio.file.Path;
+import java.util.List;
+
 public class AppInitializer {
 
     public static void main(String[] args) {
-        Conexao conexao = new Conexao();
-        LogService logService = new LogService(conexao);
+        // Caminho do XLSX por variável de ambiente (fallback para arquivo no diretório atual)
+        String excelPath = System.getenv("EXCEL_PATH");
+        Path arquivo = Path.of(excelPath != null ? excelPath : "dicionario_de_dadosV2.0.xlsx");
 
-        logService.registrar("INFO", "Sistema de processamento iniciado. Inicializando serviços...");
+        try (Conexao conexao = new Conexao()) {
+            LogService logService = new LogService(conexao);
+            try {
+                logService.registrar("INFO", "Sistema de processamento iniciado. Inicializando serviços...");
 
-        // Inicializa Componentes; Cada serviço recebe a Conexao e o LogService.
-        //VooService vooService = new VooService(conexao, logService);
+                VooService vooService = new VooService(conexao, logService);
+                LeitorExcell reader = new LeitorExcell();
 
-        logService.registrar("INFO", "Todos os serviços foram carregados com sucesso. Iniciando fluxo de trabalho.");
+                // Processa a planilha em lotes de 1000 linhas
+                reader.processar(arquivo, 1000, (List<Voo> lote) -> {
+                    vooService.carregarDadosVoos(lote);
+                }, logService);
 
-        try {
-            //Quando tiver todas as classes vou fazer assim:
-            // --- Exemplo 1: Cadastro de nova empresa ---
-            // Empresa novaEmpresa = new Empresa("AZUL Linhas Aéreas", "09249764000100");
-            // empresaService.cadastrarEmpresa(novaEmpresa);
-
-            // --- Exemplo 2: Dados em lote ---
-            //List<Voo> voosDoAno = buscarDadosExternosDeVoo();
-            //vooService.inserirVoos(voosDoAno);
-
-
+                logService.registrar("INFO", "Fluxo principal concluído com sucesso.");
+            } catch (Exception e) {
+                logService.registrar("CRITICAL",
+                        "Falha na execução principal. Encerrando de forma anormal. Detalhe: " + e.getMessage());
+                e.printStackTrace();
+            } finally {
+                logService.registrar("INFO", "Encerrando serviço de log.");
+                logService.encerrar();
+            }
         } catch (Exception e) {
-            logService.registrar("CRITICAL", "Falha na execução principal. Encerrando de forma anormal. Detalhe: " + e.getMessage());
-            e.printStackTrace();
-        }finally {
-            // Este bloco é executado SEMPRE, com ou sem erro.
-            logService.registrar("INFO", "Execução principal concluída. Solicitando encerramento do serviço de log.");
-            logService.encerrar();
+            System.err.println("Falha ao iniciar/encerrar recursos: " + e.getMessage());
         }
-
     }
 }
