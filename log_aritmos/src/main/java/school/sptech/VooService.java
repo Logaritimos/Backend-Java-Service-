@@ -73,10 +73,21 @@ public class VooService {
 
     public static String semAcento(String s) {
         if (s == null) return null;
-        String t = Normalizer.normalize(s, Normalizer.Form.NFD)
-                .replaceAll("\\p{InCombiningDiacriticalMarks}+", "")
+
+        //normaliza para NFD (decomposição)
+        String nfd = java.text.Normalizer.normalize(s, java.text.Normalizer.Form.NFD);
+
+        // remove TODOS os marks
+        String semMarks = nfd.replaceAll("\\p{M}+", ""); // \p{M} = qualquer "Mark"
+
+        // trata espaços não quebrantes e afins
+        semMarks = semMarks.replace('\u00A0', ' ');
+
+        //normaliza de volta para NFC e limpa os outros espaços
+        String sem = java.text.Normalizer.normalize(semMarks, java.text.Normalizer.Form.NFC)
+                .replaceAll("\\s+", " ")
                 .trim();
-        return t;
+        return sem;
     }
 
 
