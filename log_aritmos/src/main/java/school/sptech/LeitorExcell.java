@@ -44,8 +44,8 @@ public class LeitorExcell {
                 }
 
                 Voo v = new Voo();
-                v.setEstado(semAcento(fmt.formatCellValue(cell(row, 0))));
-                v.setMes(semAcento(fmt.formatCellValue(cell(row, 1))));
+                v.setEstado(getStr(cell(row, 0), fmt));
+                v.setMes(getStr(cell(row, 1), fmt));
                 v.setAno(getInt(cell(row, 2), fmt));
                 v.setQtdAeroportos(getInt(cell(row, 3), fmt));
                 v.setNumVoosRegulares(getInt(cell(row, 4), fmt));
@@ -60,14 +60,14 @@ public class LeitorExcell {
                     v.setNumVoosTotais(v.getNumVoosRegulares() + v.getNumVoosIrregulares());
                 }
 
-                // Campos críticos: se inválida, pula
+
                 if (isBlank(v.getEstado()) || isBlank(v.getMes()) || v.getAno() == null) {
                     puladas++;
                     continue;
                 }
 
                 try {
-                    // ✅ delega ao "last‑mile" (sanitiza de novo e insere)
+
                     conexao.inserirVoo(v);
                     inseridas++;
                 } catch (Exception e) {
@@ -109,6 +109,11 @@ public class LeitorExcell {
         if (s == null) return null;
         s = s.replaceAll("[^0-9-]", "");
         return s.isEmpty() ? null : Integer.parseInt(s);
+    }
+    private String getStr(Cell cell, DataFormatter fmt) {
+        if (cell == null) return null;
+        String s = fmt.formatCellValue(cell);
+        return isBlank(s) ? null : semAcento(s);
     }
 
     private boolean isBlank(String s) { return s == null || s.trim().isEmpty(); }
