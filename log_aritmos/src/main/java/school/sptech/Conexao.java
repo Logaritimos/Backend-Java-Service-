@@ -5,6 +5,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.sql.Timestamp;
 
+import static school.sptech.VooService.semAcento;
+
 public class Conexao implements AutoCloseable {
 
     private final BasicDataSource dataSource = new BasicDataSource();
@@ -49,13 +51,15 @@ public class Conexao implements AutoCloseable {
 
     public int inserirVoo(Voo v) {
         final String sql = """
-            INSERT INTO voo (
-              estado, mes, ano, qtdAeroportos, numVoosRegulares, numVoosIrregulares,
-              numEmbarques, numDesembarques, numVoosTotais
-            ) VALUES (?,?,?,?,?,?,?,?,?)
-            """;
+        INSERT INTO voo (
+          estado, mes, ano, qtdAeroportos, numVoosRegulares, numVoosIrregulares,
+          numEmbarques, numDesembarques, numVoosTotais
+        ) VALUES (?,?,?,?,?,?,?,?,?)
+        """;
         return jdbcTemplate.update(sql,
-                v.getEstado(), v.getMes(), v.getAno(),
+                semAcento(v.getEstado()),
+                semAcento(v.getMes()),
+                v.getAno(),
                 v.getQtdAeroportos(),
                 v.getNumVoosRegulares(), v.getNumVoosIrregulares(),
                 v.getNumEmbarques(), v.getNumDesembarques(),
@@ -76,4 +80,5 @@ public class Conexao implements AutoCloseable {
     public void close() throws Exception {
         dataSource.close();
     }
+
 }

@@ -6,7 +6,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.text.Normalizer;
+
+import static school.sptech.VooService.semAcento;
 
 public class LeitorExcell {
 
@@ -30,8 +31,8 @@ public class LeitorExcell {
                 }
 
                 Voo v = new Voo();
-                v.setEstado(removerAcentos(fmt.formatCellValue(row.getCell(0))));
-                v.setMes(removerAcentos(fmt.formatCellValue(row.getCell(1))));
+                v.setEstado(semAcento(fmt.formatCellValue(row.getCell(0))));
+                v.setMes(semAcento(fmt.formatCellValue(row.getCell(1))));
                 v.setAno(getInt(row.getCell(2), fmt));
                 v.setQtdAeroportos(getInt(row.getCell(3), fmt));
                 v.setNumVoosRegulares(getInt(row.getCell(4), fmt));
@@ -87,12 +88,5 @@ public class LeitorExcell {
         }
         String s = fmt.formatCellValue(cell).replaceAll("[^0-9-]", "");
         return s.isEmpty() ? null : Integer.parseInt(s);
-    }
-
-    private String removerAcentos(String s) {
-        if (s == null) return null;
-        return Normalizer.normalize(s, Normalizer.Form.NFD)
-                .replaceAll("\\p{InCombiningDiacriticalMarks}+", "")
-                .trim();
     }
 }

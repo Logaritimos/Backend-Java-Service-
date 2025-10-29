@@ -1,5 +1,6 @@
 package school.sptech;
 
+import java.text.Normalizer;
 import java.util.List;
 import java.util.Locale;
 
@@ -67,6 +68,15 @@ public class VooService {
         }
         return true;
     }
+
+    public static String semAcento(String s) {
+        if (s == null) return null;
+        String t = Normalizer.normalize(s, Normalizer.Form.NFD)
+                .replaceAll("\\p{InCombiningDiacriticalMarks}+", "")
+                .trim();
+        return t;
+    }
+
 
     private boolean neg(Integer n) { return n != null && n < 0; }
     private boolean isBlank(String s) { return s == null || s.trim().isEmpty(); }
