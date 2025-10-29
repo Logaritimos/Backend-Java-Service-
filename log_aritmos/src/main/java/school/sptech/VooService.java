@@ -1,6 +1,5 @@
 package school.sptech;
 
-import java.text.Normalizer;
 import java.util.List;
 import java.util.Locale;
 
@@ -74,19 +73,19 @@ public class VooService {
     public static String semAcento(String s) {
         if (s == null) return null;
 
-        //normaliza para NFD (decomposição)
+        // NFD para decompor (á -> a +  ́)
         String nfd = java.text.Normalizer.normalize(s, java.text.Normalizer.Form.NFD);
 
-        // remove TODOS os marks
-        String semMarks = nfd.replaceAll("\\p{M}+", ""); // \p{M} = qualquer "Mark"
-
-        // trata espaços não quebrantes e afins
+        // Remove TODOS os marks
+        String semMarks = nfd.replaceAll("\\p{M}+", ""); // \p{M} = Mn/Mc/Me
+        // Trata NBSP e espaços estranhos
         semMarks = semMarks.replace('\u00A0', ' ');
 
-        //normaliza de volta para NFC e limpa os outros espaços
+        // NFC novamente e enxuga espaços
         String sem = java.text.Normalizer.normalize(semMarks, java.text.Normalizer.Form.NFC)
                 .replaceAll("\\s+", " ")
                 .trim();
+
         return sem;
     }
 
@@ -95,7 +94,6 @@ public class VooService {
         v.setEstado(semAcento(v.getEstado()));
         v.setMes(semAcento(v.getMes()));
     }
-
 
     private boolean neg(Integer n) { return n != null && n < 0; }
     private boolean isBlank(String s) { return s == null || s.trim().isEmpty(); }
