@@ -1,11 +1,9 @@
 package school.sptech;
 
 import org.apache.commons.dbcp2.BasicDataSource;
-import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.sql.Timestamp;
-import java.util.List;
 
 public class Conexao implements AutoCloseable {
 
@@ -13,7 +11,7 @@ public class Conexao implements AutoCloseable {
     private final JdbcTemplate jdbcTemplate;
 
     public Conexao() {
-        // IMPORTANTE: sem espaços no nome da variável!
+        // Variáveis de ambiente (SEM espaços nos nomes)
         String dbUrl = System.getenv("DB_URL");
         String dbUser = System.getenv("DB_USER");
         String dbPassword = System.getenv("DB_PASSWORD");
@@ -23,13 +21,13 @@ public class Conexao implements AutoCloseable {
             throw new IllegalStateException("Configuração de banco de dados ausente.");
         }
 
-        // Driver MySQL
+        // Driver e credenciais
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
         dataSource.setUrl(dbUrl);
         dataSource.setUsername(dbUser);
         dataSource.setPassword(dbPassword);
 
-        // Pool — ajuste conforme a carga
+        // Pool (mantém estável mesmo inserindo linha a linha)
         dataSource.setInitialSize(2);
         dataSource.setMaxTotal(10);
         dataSource.setMaxIdle(5);
@@ -49,42 +47,27 @@ public class Conexao implements AutoCloseable {
         return jdbcTemplate;
     }
 
-    public void inserirDadosVooBatch(List<Voo> voos) {
+    public int inserirVoo(Voo v) {
         final String sql = """
             INSERT INTO voo (
-                estado, mes, ano, qtdAeroportos, numVoosRegulares, numVoosIrregulares,
-                numEmbarques, numDesembarques, numVoosTotais
+              estado, mes, ano, qtdAeroportos, numVoosRegulares, numVoosIrregulares,
+              numEmbarques, numDesembarques, numVoosTotais
             ) VALUES (?,?,?,?,?,?,?,?,?)
             """;
-
-        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
-            @Override
-            public void setValues(java.sql.PreparedStatement ps, int i) throws java.sql.SQLException {
-                Voo v = voos.get(i);
-                ps.setString(1, v.getEstado());
-                ps.setString(2, v.getMes());
-                ps.setInt(3, v.getAno());
-                ps.setInt(4, v.getQtdAeroportos());
-                ps.setInt(5, v.getNumVoosRegulares());
-                ps.setInt(6, v.getNumVoosIrregulares());
-                ps.setInt(7, v.getNumEmbarques());
-                ps.setInt(8, v.getNumDesembarques());
-                ps.setInt(9, v.getNumVoosTotais());
-            }
-
-            @Override
-            public int getBatchSize() {
-                return voos.size();
-            }
-        });
+        return jdbcTemplate.update(sql,
+                v.getEstado(), v.getMes(), v.getAno(),
+                v.getQtdAeroportos(),
+                v.getNumVoosRegulares(), v.getNumVoosIrregulares(),
+                v.getNumEmbarques(), v.getNumDesembarques(),
+                v.getNumVoosTotais());
     }
 
+    /** Mantido para logs. */
     public void inserirDadosLogs(RegistroLogs registroLogs) {
         final String sql = """
             INSERT INTO registroLogs (categoria, descricao, dtHora)
             VALUES (?,?,?)
             """;
-        // Converter para Timestamp garante compatibilidade com DATETIME
         Timestamp ts = Timestamp.valueOf(registroLogs.getDtHora());
         jdbcTemplate.update(sql, registroLogs.getCategoria(), registroLogs.getDescricao(), ts);
     }
