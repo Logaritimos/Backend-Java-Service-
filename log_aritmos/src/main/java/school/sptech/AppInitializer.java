@@ -25,7 +25,6 @@ public class AppInitializer {
                 e.printStackTrace();
             } finally {
                 logService.registrar("INFO", "Encerrando serviço de log.");
-                logService.encerrar();
             }
         } catch (Exception e) {
             System.err.println("Falha ao iniciar/encerrar recursos: " + e.getMessage());
