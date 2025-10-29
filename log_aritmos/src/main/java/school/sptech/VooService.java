@@ -29,6 +29,7 @@ public class VooService {
                     puladas++;
                     continue;
                 }
+                sanitize(v);
                 conexao.inserirVoo(v);
                 ok++;
             } catch (Exception e) {
@@ -45,6 +46,7 @@ public class VooService {
             return;
         }
         try {
+            sanitize(v);
             conexao.inserirVoo(v);
         } catch (Exception e) {
             log.registrar("ERROR", chave(v) + "Falha ao inserir: " + e.getMessage());
@@ -75,6 +77,12 @@ public class VooService {
                 .replaceAll("\\p{InCombiningDiacriticalMarks}+", "")
                 .trim();
         return t;
+    }
+
+
+    private void sanitize(Voo v) {
+        v.setEstado(semAcento(v.getEstado()));
+        v.setMes(semAcento(v.getMes()));
     }
 
 
