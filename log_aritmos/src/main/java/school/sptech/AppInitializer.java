@@ -41,7 +41,7 @@ public class AppInitializer {
                 )) {
                     // Process the Excel file from the InputStream
                     LeitorArquivo leitor = new LeitorExcell();
-                    leitor.processar((Path) excelStream, conexao, logService); // assumes processar supports InputStream
+                    leitor.processar(excelStream, conexao, logService); // assumes processar supports InputStream
                 }
 
                 logService.registrar("INFO", "Fluxo principal concluído com sucesso.");
