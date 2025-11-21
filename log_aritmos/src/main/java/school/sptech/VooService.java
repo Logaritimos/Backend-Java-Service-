@@ -24,7 +24,7 @@ public class VooService {
 
         for (Voo v : voos) {
             try {
-                if (!normalizarEAvaliar(v)) { // inválida -> pula
+                if (normalizar(v)) { // inválida -> pula
                     puladas++;
                     continue;
                 }
@@ -40,7 +40,7 @@ public class VooService {
     }
 
     public void carregarDado(Voo v) {
-        if (!normalizarEAvaliar(v)) {
+        if (normalizar(v)) {
             log.registrar("WARN", chave(v) + "Linha inválida. Pulando.");
             return;
         }
@@ -52,7 +52,7 @@ public class VooService {
         }
     }
 
-    private boolean normalizarEAvaliar(Voo v) {
+    private boolean normalizar(Voo v) {
         // Ajuste pedido: se total == 1 e houver reg/irr, usa soma
         if (v.getNumVoosTotais() != null && v.getNumVoosTotais() == 1
                 && v.getNumVoosRegulares() != null && v.getNumVoosIrregulares() != null) {
@@ -60,14 +60,14 @@ public class VooService {
         }
 
         // Críticos: estado, mês, ano
-        if (isBlank(v.getEstado()) || isBlank(v.getMes()) || v.getAno() == null) return false;
+        if (isBlank(v.getEstado()) || isBlank(v.getMes()) || v.getAno() == null) return true;
 
         // Valores negativos → pula
         if (neg(v.getQtdAeroportos()) || neg(v.getNumVoosRegulares()) || neg(v.getNumVoosIrregulares())
                 || neg(v.getNumEmbarques()) || neg(v.getNumDesembarques()) || neg(v.getNumVoosTotais())) {
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     public static String semAcento(String s) {
