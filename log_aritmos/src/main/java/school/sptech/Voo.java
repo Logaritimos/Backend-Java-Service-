@@ -28,9 +28,7 @@ public class Voo {
         this.estado = estado;
     }
 
-    public String getMes() {
-        return mes;
-    }
+    public String getMes() {return mes;}
 
     public void setMes(String mes) {
         this.mes = mes;
