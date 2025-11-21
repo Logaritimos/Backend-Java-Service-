@@ -5,7 +5,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.sql.Timestamp;
 
-import static school.sptech.VooService.semAcento;
+import static school.sptech.LeitorArquivo.semAcento;
 
 public class Conexao implements AutoCloseable {
 
@@ -43,10 +43,6 @@ public class Conexao implements AutoCloseable {
         dataSource.setTimeBetweenEvictionRunsMillis(300_000);
 
         this.jdbcTemplate = new JdbcTemplate(dataSource);
-    }
-
-    public JdbcTemplate getJdbcTemplate() {
-        return jdbcTemplate;
     }
 
     public int inserirVoo(Voo v) {

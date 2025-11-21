@@ -4,18 +4,14 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import static school.sptech.VooService.semAcento;
 
 public class LeitorExcell extends LeitorArquivo {
 
     private static final int MAX_VAZIAS_SEGUIDAS = 5;
 
     @Override
-    public void processar(Path caminhoXlsx, Conexao conexao, LogService logService) throws Exception {
-        try (InputStream in = Files.newInputStream(caminhoXlsx);
-                Workbook wb = new XSSFWorkbook(in)) {
+    public void processar(InputStream inputStream, Conexao conexao, LogService logService) throws Exception {
+        try (Workbook wb = new XSSFWorkbook(inputStream)) {
 
             Sheet sheet = wb.getSheetAt(0);
             if (sheet == null) throw new IllegalStateException("Aba 0 inexistente no XLSX.");

@@ -1,19 +1,10 @@
 package school.sptech;
 
 public class Notificacao {
-    private Integer idNotificacao;
     private String mensagem;
     private String urlCanal;
     private String status;
     private String parametro;
-
-    public Integer getIdNotificacao() {
-        return idNotificacao;
-    }
-
-    public void setIdNotificacao(Integer idNotificacao) {
-        this.idNotificacao = idNotificacao;
-    }
 
     public String getMensagem() {
         return mensagem;

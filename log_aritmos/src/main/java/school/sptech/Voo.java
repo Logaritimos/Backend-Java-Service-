@@ -1,7 +1,6 @@
 package school.sptech;
 
 public class Voo {
-    private Integer idVoo;
     private String estado;
     private String mes;
     private Integer ano;
@@ -11,14 +10,6 @@ public class Voo {
     private Integer numEmbarques;
     private Integer numDesembarques;
     private Integer numVoosTotais;
-
-    public Integer getIdVoo() {
-        return idVoo;
-    }
-
-    public void setIdVoo(Integer idVoo) {
-        this.idVoo = idVoo;
-    }
 
     public String getEstado() {
         return estado;
