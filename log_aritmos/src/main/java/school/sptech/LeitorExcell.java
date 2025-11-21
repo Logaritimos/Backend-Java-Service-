@@ -8,10 +8,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import static school.sptech.VooService.semAcento;
 
-public class LeitorExcell {
+public class LeitorExcell extends LeitorArquivo {
 
     private static final int MAX_VAZIAS_SEGUIDAS = 5;
 
+    @Override
     public void processar(Path caminhoXlsx, Conexao conexao, LogService logService) throws Exception {
         try (InputStream in = Files.newInputStream(caminhoXlsx);
              Workbook wb = new XSSFWorkbook(in)) {
@@ -30,7 +31,6 @@ public class LeitorExcell {
             for (int r = 1; r <= lastRow; r++) {
                 Row row = sheet.getRow(r);
 
-                // Vazia? Conta e só encerra após MAX_VAZIAS_SEGUIDAS
                 if (linhaVazia(row, fmt)) {
                     vaziasSeguidas++;
                     if (vaziasSeguidas >= MAX_VAZIAS_SEGUIDAS) {
@@ -54,12 +54,10 @@ public class LeitorExcell {
                 v.setNumDesembarques(getInt(cell(row, 7), fmt));
                 v.setNumVoosTotais(getInt(cell(row, 8), fmt));
 
-                // Se total == 1 e há reg/irr, usa soma
                 if (v.getNumVoosTotais() != null && v.getNumVoosTotais() == 1
                         && v.getNumVoosRegulares() != null && v.getNumVoosIrregulares() != null) {
                     v.setNumVoosTotais(v.getNumVoosRegulares() + v.getNumVoosIrregulares());
                 }
-
 
                 if (isBlank(v.getEstado()) || isBlank(v.getMes()) || v.getAno() == null) {
                     puladas++;
@@ -67,7 +65,6 @@ public class LeitorExcell {
                 }
 
                 try {
-
                     conexao.inserirVoo(v);
                     inseridas++;
                 } catch (Exception e) {
@@ -82,7 +79,6 @@ public class LeitorExcell {
         }
     }
 
-    // ===== helpers =====
     private Cell cell(Row row, int idx) {
         if (row == null || idx < 0) return null;
         return row.getCell(idx, Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
@@ -110,12 +106,10 @@ public class LeitorExcell {
         s = s.replaceAll("[^0-9-]", "");
         return s.isEmpty() ? null : Integer.parseInt(s);
     }
+
     private String getStr(Cell cell, DataFormatter fmt) {
         if (cell == null) return null;
         String s = fmt.formatCellValue(cell);
         return isBlank(s) ? null : semAcento(s);
     }
-
-    private boolean isBlank(String s) { return s == null || s.trim().isEmpty(); }
-    private String safe(String m, int max) { return (m == null || m.length() <= max) ? (m == null ? "" : m) : m.substring(0, max); }
 }

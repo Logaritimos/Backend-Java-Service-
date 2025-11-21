@@ -16,7 +16,7 @@ public class AppInitializer {
             try {
                 logService.registrar("INFO", "Sistema de processamento iniciado. Inicializando serviços...");
 
-                LeitorExcell leitor = new LeitorExcell();
+                LeitorArquivo leitor = new LeitorExcell();
                 leitor.processar(Path.of(excelPath), conexao, logService);
 
                 logService.registrar("INFO", "Fluxo principal concluído com sucesso.");
