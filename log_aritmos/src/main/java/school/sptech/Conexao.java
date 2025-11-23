@@ -14,7 +14,7 @@ public class Conexao implements AutoCloseable {
 
     public Conexao() {
         // Variáveis de ambiente (SEM espaços nos nomes)
-        String dbUrl = "jdbc:mysql://localhost:3306/logaritmos?useSSL=false&serverTimezone=UTC";
+        String dbUrl = "jdbc:mysql://127.0.0.1:3306/logaritmos?useSSL=false&serverTimezone=UTC";
         String dbUser = "root";
         String dbPassword = "urubu100";
 
