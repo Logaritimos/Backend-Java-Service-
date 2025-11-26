@@ -30,7 +30,7 @@ public class LogService {
         Throwable cause = e;
         int nivel = 1;
         while (cause != null) {
-            System.err.println("Causa nível " + nivel + ": " + cause.getClass().getName() +
+            System.err.println("ERROR [ " + nivel + " ]: " + cause.getClass().getName() +
                     " - " + cause.getMessage());
             cause = cause.getCause();
             nivel++;
