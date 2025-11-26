@@ -6,8 +6,8 @@ import java.nio.file.Path;
 public class AppInitializer {
 
     public static void main(String[] args) {
-        String bucketName = System.getenv("AWS_BUCKET_NAME");
-        String fileName = System.getenv("AWS_FILE_KEY");
+        String bucketName = "amzn-s3-bucket-logaritmos1";
+        String fileName = "dicionario_de_dadosV2.0.xlsx ";
 
         if (bucketName == null || fileName == null) {
             System.err.println("ERRO: Variáveis AWS_BUCKET_NAME e AWS_FILE_KEY são obrigatórias.");
