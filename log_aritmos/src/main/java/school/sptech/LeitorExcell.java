@@ -24,7 +24,7 @@ public class LeitorExcell extends LeitorArquivo {
             logService.registrar("INFO",
                     "Leitura simplificada: lastRow=" + lastRow + " (dados começam na linha 1)");
 
-            for (int r = 2; r <= lastRow; r++) {
+            for (int r = 1; r <= lastRow; r++) {
                 Row row = sheet.getRow(r);
 
                 if (linhaVazia(row, fmt)) {
@@ -54,6 +54,19 @@ public class LeitorExcell extends LeitorArquivo {
                         && v.getNumVoosRegulares() != null && v.getNumVoosIrregulares() != null) {
                     v.setNumVoosTotais(v.getNumVoosRegulares() + v.getNumVoosIrregulares());
                 }
+                logService.registrar("DEBUG",
+                        "Linha " + r +
+                                " | estado='" + v.getEstado() + "'" +
+                                " | mes='" + v.getMes() + "'" +
+                                " | ano=" + v.getAno() +
+                                " | aeroportos=" + v.getQtdAeroportos() +
+                                " | regulares=" + v.getNumVoosRegulares() +
+                                " | irregulares=" + v.getNumVoosIrregulares() +
+                                " | embarques=" + v.getNumEmbarques() +
+                                " | desembarques=" + v.getNumDesembarques() +
+                                " | total=" + v.getNumVoosTotais()
+                );
+
 
                 if (isBlank(v.getEstado()) || isBlank(v.getMes()) || v.getAno() == null) {
                     puladas++;
