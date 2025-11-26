@@ -40,15 +40,15 @@ public class LeitorExcell extends LeitorArquivo {
                 }
 
                 Voo v = new Voo();
-                v.setEstado(getStr(cell(row, 0), fmt));
-                v.setMes(getStr(cell(row, 1), fmt));
-                v.setAno(getInt(cell(row, 2), fmt));
-                v.setQtdAeroportos(getInt(cell(row, 3), fmt));
-                v.setNumVoosRegulares(getInt(cell(row, 4), fmt));
-                v.setNumVoosIrregulares(getInt(cell(row, 5), fmt));
-                v.setNumEmbarques(getInt(cell(row, 6), fmt));
-                v.setNumDesembarques(getInt(cell(row, 7), fmt));
-                v.setNumVoosTotais(getInt(cell(row, 8), fmt));
+                v.setEstado(getStr(cell(row, 1), fmt));
+                v.setMes(getStr(cell(row, 2), fmt));
+                v.setAno(getInt(cell(row, 3), fmt));
+                v.setQtdAeroportos(getInt(cell(row, 4), fmt));
+                v.setNumVoosRegulares(getInt(cell(row, 5), fmt));
+                v.setNumVoosIrregulares(getInt(cell(row, 6), fmt));
+                v.setNumEmbarques(getInt(cell(row, 7), fmt));
+                v.setNumDesembarques(getInt(cell(row, 8), fmt));
+                v.setNumVoosTotais(getInt(cell(row, 9), fmt));
 
                 if (v.getNumVoosTotais() != null && v.getNumVoosTotais() == 1
                         && v.getNumVoosRegulares() != null && v.getNumVoosIrregulares() != null) {
