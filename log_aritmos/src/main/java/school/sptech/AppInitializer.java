@@ -5,13 +5,9 @@ import java.io.InputStream;
 public class AppInitializer {
 
     public static void main(String[] args) {
-<<<<<<< HEAD
-        String bucketName = "amzn-s3-bucket-logaritmos1";
-        String fileName = "dicionario_de_dadosV2.0.xlsx ";
-=======
+
         String bucketName = "amzn-s3-bucket-logaritmos";
         String fileName = "dicionario_de_dadosV2.0.xlsx";
->>>>>>> c84892094460b46bc063f186185c1ec411050080
 
         if (bucketName == null || fileName == null) {
             System.err.println("ERRO: Variáveis AWS_BUCKET_NAME e AWS_FILE_KEY são obrigatórias.");
