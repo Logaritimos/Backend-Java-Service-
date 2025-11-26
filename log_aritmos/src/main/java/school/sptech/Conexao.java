@@ -14,9 +14,9 @@ public class Conexao implements AutoCloseable {
 
     public Conexao() {
         // Variáveis de ambiente (SEM espaços nos nomes)
-        String dbUrl = System.getenv("DB_URL");
-        String dbUser = System.getenv("DB_USER");
-        String dbPassword = System.getenv("DB_PASSWORD");
+        String dbUrl = "jdbc:mysql://container-bd:3306/logaritmos?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
+        String dbUser = "root";
+        String dbPassword = "urubu100";
 
         if (dbUrl == null || dbUser == null || dbPassword == null) {
             System.err.println("ERRO: Variáveis de ambiente (DB_URL, DB_USER, DB_PASSWORD) não configuradas.");
