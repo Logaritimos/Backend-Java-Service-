@@ -24,16 +24,19 @@ public class LogService {
             conexao.inserirDadosLogs(log);
 
         } catch (DataAccessException e) {
-            System.err.println("Falha ao salvar log (Spring): " + e.getMessage());
+        System.err.println("Falha ao salvar log (Spring): " + e.getMessage());
 
-            Throwable root = e.getRootCause();
-            if (root instanceof java.sql.SQLException sqlEx) {
-                System.err.println("Mensagem JDBC: " + sqlEx.getMessage());
-                System.err.println("SQLState: " + sqlEx.getSQLState());
-                System.err.println("Código: " + sqlEx.getErrorCode());
-            }
-
-        } catch (Exception e) {
+        // percorre toda a cadeia de causas
+        Throwable cause = e;
+        int nivel = 1;
+        while (cause != null) {
+            System.err.println("Causa nível " + nivel + ": " + cause.getClass().getName() +
+                    " - " + cause.getMessage());
+            cause = cause.getCause();
+            nivel++;
+        }
+    }
+ catch (Exception e) {
             System.err.println("Erro inesperado ao salvar log: " + e.getMessage());
         }
     }
