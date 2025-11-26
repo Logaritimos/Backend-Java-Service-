@@ -24,7 +24,7 @@ public class LeitorExcell extends LeitorArquivo {
             logService.registrar("INFO",
                     "Leitura simplificada: lastRow=" + lastRow + " (dados começam na linha 1)");
 
-            for (int r = 1; r <= lastRow; r++) {
+            for (int r = 2; r <= lastRow; r++) {
                 Row row = sheet.getRow(r);
 
                 if (linhaVazia(row, fmt)) {
