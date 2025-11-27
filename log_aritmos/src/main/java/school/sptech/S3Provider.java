@@ -14,15 +14,8 @@ public class S3Provider {
     }
 
     public S3Client getS3Client() {
-        String regionEnv = System.getenv("AWS_REGION");
-
-        // Se não houver variável configurada usa US_EAST_1
-        Region region = (regionEnv == null || regionEnv.isBlank())
-                ? Region.US_EAST_1
-                : Region.of(regionEnv);
-
         return S3Client.builder()
-                .region(region)
+                .region(Region.US_EAST_1)
                 .credentialsProvider(credentials)
                 .build();
     }
