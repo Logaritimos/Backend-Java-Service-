@@ -47,11 +47,12 @@ public class Conexao implements AutoCloseable {
 
     public int inserirVoo(Voo v) {
         final String sql = """
-        INSERT INTO voo (
-          estado, mes, ano, qtdAeroportos, numVoosRegulares, numVoosIrregulares,
-          numEmbarques, numDesembarques, numVoosTotais
+        INSERT IGNORE INTO voo (
+        estado, mes, ano, qtdAeroportos, numVoosRegulares, numVoosIrregulares,
+        numEmbarques, numDesembarques, numVoosTotais
         ) VALUES (?,?,?,?,?,?,?,?,?)
         """;
+
         return jdbcTemplate.update(sql,
                 semAcento(v.getEstado()),
                 semAcento(v.getMes()),

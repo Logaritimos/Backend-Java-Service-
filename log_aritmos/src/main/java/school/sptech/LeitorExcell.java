@@ -19,10 +19,10 @@ public class LeitorExcell extends LeitorArquivo {
             DataFormatter fmt = new DataFormatter();
             int lastRow = sheet.getLastRowNum();
 
-            int inseridas = 0, puladas = 0, erros = 0, vaziasSeguidas = 0;
+            int inseridas = 0, ignoradas = 0, puladas = 0, erros = 0, vaziasSeguidas = 0;
 
             logService.registrar("INFO",
-                    "Leitura simplificada: lastRow=" + lastRow + " (dados começam na linha 1)");
+                    "Leitura iniciada: lastRow=" + lastRow);
 
             for (int r = 1; r <= lastRow; r++) {
                 Row row = sheet.getRow(r);
@@ -74,8 +74,13 @@ public class LeitorExcell extends LeitorArquivo {
                 }
 
                 try {
-                    conexao.inserirVoo(v);
-                    inseridas++;
+                    int linhasAfetadas = conexao.inserirVoo(v);
+                    if (linhasAfetadas > 0) {
+                        inseridas++;
+                        logService.registrar("DEBUG", "Linha " + r + " inserida com sucesso.");
+                    } else {
+                        ignoradas++;
+                    }
                 } catch (Exception e) {
                     erros++;
                     logService.registrar("ERROR",
@@ -84,8 +89,8 @@ public class LeitorExcell extends LeitorArquivo {
             }
 
             logService.registrar("INFO",
-                    "Leitura concluída. Inseridas=" + inseridas + " | Puladas=" + puladas + " | Erros=" + erros);
-        }
+                    String.format("Leitura concluída. Novos=%d | Duplicados(Ignorados)=%d | Pulados=%d | Erros=%d",
+                            inseridas, ignoradas, puladas, erros));        }
     }
 
     private Cell cell(Row row, int idx) {
