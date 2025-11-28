@@ -14,7 +14,7 @@ public class S3Reader {
         S3Client s3 = new S3Provider().getS3Client();
         List<Bucket> buckets = s3.listBuckets().buckets();
         for (Bucket bucketDaVez : buckets) {
-            if(bucketName.contains(bucketDaVez.name())){
+            if(bucketDaVez.name().contains(bucketName)){
                 bucketName = bucketDaVez.name();
                 GetObjectRequest getObjectRequest = GetObjectRequest.builder()
                         .bucket(bucketName)
