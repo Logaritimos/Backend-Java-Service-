@@ -78,4 +78,7 @@ public class Conexao implements AutoCloseable {
         dataSource.close();
     }
 
+    public JdbcTemplate getJdbcTemplate() {
+        return jdbcTemplate;
+    }
 }

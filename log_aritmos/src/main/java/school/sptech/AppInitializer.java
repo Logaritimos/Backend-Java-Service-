@@ -30,7 +30,12 @@ public class AppInitializer {
                 LeitorArquivo leitor = new LeitorExcell();
                 leitor.processar(s3Stream, conexao, logService);
 
-                logService.registrar("INFO", "Fluxo principal concluído com sucesso.");
+                logService.registrar("INFO", "Fluxo de ETL concluído. Iniciando módulo de monitoramento...");
+                MonitoramentoService monitor = new MonitoramentoService(conexao, logService);
+                monitor.checarAlertas();
+
+                logService.registrar("INFO", "Pipeline completo finalizado com sucesso.");
+
             } catch (Exception e) {
                 logService.registrar("CRITICAL", "Falha na execução principal: " + e.getMessage());
                 e.printStackTrace();
