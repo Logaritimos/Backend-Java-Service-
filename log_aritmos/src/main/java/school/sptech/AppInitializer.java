@@ -32,6 +32,7 @@ public class AppInitializer {
 
                 logService.registrar("INFO", "Fluxo de ETL concluído. Iniciando módulo de monitoramento...");
                 MonitoramentoService monitor = new MonitoramentoService(conexao, logService);
+                monitor.notificarInicioMonitoramento();
                 monitor.checarAlertas();
 
                 logService.registrar("INFO", "Pipeline completo finalizado com sucesso.");

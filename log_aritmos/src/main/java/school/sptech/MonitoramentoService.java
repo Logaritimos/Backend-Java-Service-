@@ -133,4 +133,44 @@ public class MonitoramentoService {
             logService.registrar("ERROR", "Erro ao processar regra do estado " + estado + ": " + e.getMessage());
         }
     }
+    public void notificarInicioMonitoramento() {
+        logService.registrar("INFO", "Enviando mensagens de boas-vindas aos canais ativos...");
+
+        String sql = """
+            SELECT sc.canal, sc.paramEstado, sc.paramDemanda, sb.token, emp.razaoSocial
+            FROM slackCanal sc
+            JOIN slackBot sb ON sc.fkSlackBot = sb.idSlackBot
+            JOIN empresa emp ON sc.fkEmpresa = emp.idEmpresa
+            WHERE sc.status = 'Ativo'
+        """;
+
+        try {
+            List<Map<String, Object>> canaisAtivos = db.queryForList(sql);
+
+            if (canaisAtivos.isEmpty()) {
+                logService.registrar("INFO", "Nenhum canal ativo para notificar inicialização.");
+                return;
+            }
+
+            for (Map<String, Object> canal : canaisAtivos) {
+                String token = (String) canal.get("token");
+                String nomeCanal = (String) canal.get("canal");
+                String estado = (String) canal.get("paramEstado");
+                String demanda = (String) canal.get("paramDemanda");
+
+                String msg = String.format(
+                        "*Sistema Iniciado!*\nO monitoramento de *%s* (%s Demanda) está ativo e operante.",
+                        estado, demanda
+                );
+
+                slackService.enviarMensagem(token, nomeCanal, msg);
+                logService.registrar("INFO", "Boas-vindas enviada para " + nomeCanal);
+
+                Thread.sleep(500);
+            }
+
+        } catch (Exception e) {
+            logService.registrar("ERROR", "Erro ao notificar início: " + e.getMessage());
+        }
+    }
 }
